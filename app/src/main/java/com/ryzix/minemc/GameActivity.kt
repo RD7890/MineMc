@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.ryzix.minemc.databinding.ActivityGameBinding
 
@@ -34,17 +35,28 @@ class GameActivity : AppCompatActivity() {
     private var isPaused = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Set fullscreen flags BEFORE super.onCreate so the DecorView is
+        // created fullscreen. Calling insetsController before this causes
+        // a NullPointerException on many devices (MIUI, etc.).
+        @Suppress("DEPRECATION")
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN or
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN or
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        )
         super.onCreate(savedInstanceState)
-        hideSystemUI()
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // DecorView is now attached — safe to call insetsController
+        hideSystemUI()
+
         settings = Settings(this)
 
-        // Build GL surface and add to container
         glView = GameSurfaceView(this)
         binding.glContainer.addView(glView)
 
-        // Init native engine
         val saveDir = getExternalFilesDir(null)?.absolutePath ?: filesDir.absolutePath
         val savePath = "$saveDir/world.dat"
         NativeBridge.nativeInit(assets, savePath)
@@ -54,15 +66,12 @@ class GameActivity : AppCompatActivity() {
             NativeBridge.nativeNewWorld()
         }
 
-        // Pause menu buttons
         binding.btnResume.setOnClickListener { resumeGame() }
         binding.btnSaveQuit.setOnClickListener {
             NativeBridge.nativeSaveWorld()
             finish()
         }
 
-        // Back button = pause
-        // (handled via onBackPressedDispatcher below)
         onBackPressedDispatcher.addCallback(this,
             object : androidx.activity.OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -105,19 +114,27 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun hideSystemUI() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            window.insetsController?.let {
-                it.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-                it.systemBarsBehavior =
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                val controller = window.insetsController ?: return
+                controller.hide(
+                    WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars()
+                )
+                controller.systemBarsBehavior =
                     WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            } else {
+                @Suppress("DEPRECATION")
+                window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                )
             }
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            )
+        } catch (e: Exception) {
+            // Some OEM ROMs (MIUI, One UI, etc.) can throw here — window still works
         }
     }
 
