@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MineMc</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_settings">Settings</string>
+    <string name="btn_quit">Quit</string>
+    <string name="btn_resume">Resume</string>
+    <string name="btn_save_quit">Save &amp; Quit</string>
+    <string name="btn_continue">Continue World</string>
+    <string name="btn_new_world">New World</string>
+    <string name="pause_title">Paused</string>
+    <string name="menu_title">MineMc</string>
+</resources>
