@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Simple grass block icon -->
+    <!-- Dirt body -->
+    <path
+        android:fillColor="#8B6914"
+        android:pathData="M20,40 L88,40 L88,88 L20,88 Z" />
+    <!-- Grass top strip -->
+    <path
+        android:fillColor="#5C8A3C"
+        android:pathData="M20,28 L88,28 L88,42 L20,42 Z" />
+    <!-- Simple M letter -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,50 L34,78 L40,78 L40,62 L54,78 L68,62 L68,78 L74,78 L74,50 L68,50 L54,66 L40,50 Z" />
+</vector>
