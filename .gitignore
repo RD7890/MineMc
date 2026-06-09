@@ -1,0 +1,35 @@
+# Android build outputs
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+
+# Key stores (NEVER commit signing keys)
+*.jks
+*.keystore
+
+# NDK generated
+*.so
+*.o
+
+# Gradle caches (except the wrapper jar which is committed)
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# CMake build directories
+cmake-build-*/
+CMakeFiles/
+
+# IDE
+*.swp
+*.swo
+*~
+.vscode/
