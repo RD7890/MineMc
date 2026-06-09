@@ -2,7 +2,6 @@
 #include "Block.h"
 #include <array>
 #include <vector>
-#include <glm/glm.hpp>
 
 namespace minemc {
 
@@ -43,10 +42,9 @@ public:
     bool meshDirty = true;
     bool gpuUploaded = false;
 
-    // World-space origin of this chunk (x and z, y = 0)
-    glm::vec3 worldOrigin() const {
-        return { coord.cx * CHUNK_SIZE, 0.0f, coord.cz * CHUNK_SIZE };
-    }
+    // World-space X/Z origin of this chunk (Y is always 0)
+    float originX() const { return static_cast<float>(coord.cx * CHUNK_SIZE); }
+    float originZ() const { return static_cast<float>(coord.cz * CHUNK_SIZE); }
 
     // Block access by local chunk coordinates
     BlockType getBlock(int x, int y, int z) const;
