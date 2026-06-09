@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <!-- GL surface fills the whole screen -->
+    <FrameLayout
+        android:id="@+id/glContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- HUD overlay drawn on top -->
+    <com.ryzix.minemc.GameOverlayView
+        android:id="@+id/gameOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Pause menu overlay (hidden by default) -->
+    <LinearLayout
+        android:id="@+id/pauseMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/overlayBackground"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pause_title"
+            android:textColor="@color/textPrimary"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:fontFamily="monospace"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btnResume"
+            android:layout_width="200dp"
+            android:layout_height="48dp"
+            android:text="@string/btn_resume"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnSaveQuit"
+            android:layout_width="200dp"
+            android:layout_height="48dp"
+            android:text="@string/btn_save_quit"
+            android:backgroundTint="#555555" />
+
+    </LinearLayout>
+
+</FrameLayout>
